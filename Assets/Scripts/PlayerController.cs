@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
             //画面をタップ(クリック)した位置をカメラのスクリーン座標の情報を通じてワールド座標に変換
             Vector3 tapPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            Debug.Log("タップした位置情報：" + tapPos);
+            //Debug.Log("タップした位置情報：" + tapPos);
 
             //方向を計算(マウスクリックの位置からキャラの位置を減算する)
             Vector3 direction = tapPos - transform.position;
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
             direction = direction.normalized;
 
 
-            Debug.Log("正規化処理後の方向：" + direction)
+            //Debug.Log("正規化処理後の方向：" + direction)
                 ;
 
             //バレット生成

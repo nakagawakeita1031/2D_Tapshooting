@@ -9,6 +9,9 @@ public class Bullet : MonoBehaviour
     [Header("バレット速度")]
     public float bulletSpeed;
 
+    [Header("バレット攻撃力")]
+    public int bulletPower;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,19 +19,6 @@ public class Bullet : MonoBehaviour
 
         //Debug.Log("発射");
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-     if (Input.GetMouseButtonDown(0))
-        {
-            //ShotBullet();
-
-            Debug.Log("左クリック確認");
-        }
-
-        
     }
     /// <summary>
     /// バレット制御
@@ -39,7 +29,7 @@ public class Bullet : MonoBehaviour
         //発射方向と速度を変更
         GetComponent<Rigidbody2D>().AddForce(direction * bulletSpeed);
 
-        Debug.Log("発射速度：" + bulletSpeed);
+        //Debug.Log("発射速度：" + bulletSpeed);
 
         //5秒後にbullet破壊
         Destroy(this.gameObject, 5.0f);
