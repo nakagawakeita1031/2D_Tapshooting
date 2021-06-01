@@ -6,6 +6,8 @@ public class EnemyContoroller : MonoBehaviour
 {
     public float moveSpeed;
     public int enemyHP;
+    [Header("Enemyの攻撃力")]
+    public int enemyPower;
 
 
     // Start is called before the first frame update
