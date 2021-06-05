@@ -1853,6 +1853,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   durability: 100
+  txtDurability: {fileID: 215857918}
+  slider: {fileID: 914723554}
 --- !u!50 &1964631373
 Rigidbody2D:
   serializedVersion: 4

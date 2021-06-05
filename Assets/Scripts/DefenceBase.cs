@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class DefenceBase : MonoBehaviour
@@ -11,6 +12,9 @@ public class DefenceBase : MonoBehaviour
 
     [SerializeField]
     private Text txtDurability;
+
+    [SerializeField]
+    private Slider slider;
 
     private int minDurability = 0; //耐久値の最小を代入
     private int maxDurability; //耐久値の最大を代入
@@ -67,6 +71,9 @@ public class DefenceBase : MonoBehaviour
     {
         //画面に耐久値を現在 / 最大値の形式で表示する
         txtDurability.text = durability + "/" + maxDurability;
+
+        //ゲージの表示を耐久値に合わせて更新(最初はduability / maxduarbilityの結果が1.0ｆになるので、ゲージは最大値になる)
+        slider.DOValue((float)durability / maxDurability, 0.25f);
     }
 
 }
