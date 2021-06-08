@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class EnemyContoroller : MonoBehaviour
 {
@@ -9,11 +11,21 @@ public class EnemyContoroller : MonoBehaviour
     [Header("Enemyの攻撃力")]
     public int enemyPower;
 
+    [SerializeField]
+    private Slider slider;
+
+    private int minHP = 0;
+    private int maxHP;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        //ゲーム開始時点のHPの値を最大値として代入
+        maxHP = enemyHP;
+
+        //HPゲージの表示更新
+        DisplayHpGauge();
     }
 
     // Update is called once per frame
@@ -62,11 +74,20 @@ public class EnemyContoroller : MonoBehaviour
         Destroy(collision.gameObject);
 
     }
-
+    /// <summary>
+    /// Hpの更新処理とエネミーの破壊確認処理
+    /// </summary>
+    /// <param name="bullet"></param>
     private void UpdateHP(Bullet bullet) //受け取る情報用の引数を追加
     {
         //Enemyの体力を減らす
         enemyHP -= bullet.bulletPower; //Bulletスクリプトが管理しているpublic情報であるbulletPower変数を利用する
+
+        //Hpの値の上限・下限を確認して範囲内に制限
+        enemyHP = Mathf.Clamp(enemyHP, minHP, maxHP);
+
+        //Hpゲージの表示更新
+        DisplayHpGauge();
 
         //体力が０以下になったら
         if (enemyHP <= 0)
@@ -80,5 +101,14 @@ public class EnemyContoroller : MonoBehaviour
         {
             Debug.Log("残り HP :" + enemyHP);
         }
+    }
+
+    /// <summary>
+    /// HPゲージの表示更新
+    /// </summary>
+    private void DisplayHpGauge()
+    {
+        //Hpゲージを現在値に合わせて制御
+        slider.DOValue((float)enemyHP / maxHP, 0.25f);
     }
 }
