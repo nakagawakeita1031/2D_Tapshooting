@@ -19,8 +19,17 @@ public class DefenceBase : MonoBehaviour
     private int minDurability = 0; //耐久値の最小を代入
     private int maxDurability; //耐久値の最大を代入
 
-    void Start()
+    private GameManager gameManager;
+
+    /// <summary>
+    /// DefenseBaseの設定
+    /// </summary>
+    /// <param name="gameManager"></param>
+    public void SetUpDefenceBase(GameManager gameManager)
     {
+        //引数を利用して、gameManagerスクリプトの情報を受け取って用意しておいた変数に代入
+        this.gameManager = gameManager;
+
         //ゲームの開始時点の耐久値を最大値として代入する
         maxDurability = durability;
 
@@ -57,11 +66,16 @@ public class DefenceBase : MonoBehaviour
         DisplayDurability();
 
 
-        //TODO ゲージの表示を耐久値に合わせて更新
-
         //TODO 耐久値が0以下になっていないか確認
+        if (durability <= 0 && gameManager.isGameUp == false)
+        {
+            Debug.Log("Game Over");
 
-        //TODO 耐久値が0以下なら、ゲームオーバーの判定を行う
+            //TODO 耐久値が0以下なら、ゲームオーバーの判定を行う
+            gameManager.SwitchGameUp(true);
+        }
+
+
     }
 
     /// <summary>

@@ -17,10 +17,12 @@ public class EnemyContoroller : MonoBehaviour
     private int minHP = 0;
     private int maxHP;
 
-
     // Start is called before the first frame update
-    void Start()
+    public void SetUpEnemy()
     {
+        //エネミーのx軸(左右)の位置をゲーム画面に収まる範囲でランダムな位置に変更
+        transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-630, 630), transform.localPosition.y, 0);
+        
         //ゲーム開始時点のHPの値を最大値として代入
         maxHP = enemyHP;
 
@@ -35,7 +37,7 @@ public class EnemyContoroller : MonoBehaviour
         transform.Translate(0, moveSpeed, 0);
 
         //Enemyの位置が一定値を超えたら
-        if (transform.localPosition.y < -1500f)
+        if (transform.localPosition.y < -2500f)
         {
             
             Destroy(gameObject);

@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject bulletPrefab;
+
+    private GameManager gameManager;
    
     // Start is called before the first frame update
     void Start()
@@ -15,6 +17,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameManager.isGameUp)
+        {
+            return;
+        }
+
         //マウスの左クリックを押したら
         if (Input.GetMouseButtonDown(0))
         {
@@ -34,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
 
             //Debug.Log("正規化処理後の方向：" + direction)
-                ;
+                
 
             //バレット生成
             GenerateBullet(direction);
@@ -52,5 +59,14 @@ public class PlayerController : MonoBehaviour
         //bulletObj変数(Bulletゲームオブジェクトが代入されている)にアタッチされているBulletスクリプトの
         //情報を取得しShotBulletメソッドに処理を行うように命令
         bulletObj.GetComponent<Bullet>().ShotBullet(direction);
+    }
+
+    /// <summary>
+    /// PlayerControllerの設定
+    /// </summary>
+    /// <param name="gameManager"></param>
+    public void SetUpplayer(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
     }
 }
