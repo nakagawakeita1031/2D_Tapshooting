@@ -404,6 +404,7 @@ MonoBehaviour:
   enemyHP: 30
   enemyPower: 50
   slider: {fileID: 200798747073390509}
+  bulletEffectPrefab: {fileID: 4169109296022207299, guid: 7d3f7b1b36bb3f5479bd48659c59f7af, type: 3}
 --- !u!70 &200798748442777671
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -17,6 +17,9 @@ public class EnemyContoroller : MonoBehaviour
     private int minHP = 0;
     private int maxHP;
 
+    [SerializeField]
+    private GameObject bulletEffectPrefab;
+
     // Start is called before the first frame update
     public void SetUpEnemy()
     {
@@ -57,6 +60,9 @@ public class EnemyContoroller : MonoBehaviour
             if (collision.gameObject.TryGetComponent(out Bullet bullet))
             {
                 UpdateHP(bullet);
+
+                //Bulletヒット演出用エフェクトの生成
+                GenerateBulletEffect(collision.gameObject.transform);
             }
         }
        
@@ -112,5 +118,15 @@ public class EnemyContoroller : MonoBehaviour
     {
         //Hpゲージを現在値に合わせて制御
         slider.DOValue((float)enemyHP / maxHP, 0.25f);
+    }
+
+    private void GenerateBulletEffect(Transform bulletTran)
+    {
+        GameObject effect = Instantiate(bulletEffectPrefab, bulletTran, false);
+
+        effect.transform.SetParent(transform);
+
+        Destroy(effect, 3.0f);
+
     }
 }
