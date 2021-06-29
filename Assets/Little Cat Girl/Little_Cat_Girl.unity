@@ -1833,6 +1833,7 @@ MonoBehaviour:
   durability: 100
   txtDurability: {fileID: 215857918}
   slider: {fileID: 914723554}
+  enemyAttackEffectPrefab: {fileID: 8827422180773589261, guid: 328fda23df770e9498759f48be5d7ec5, type: 3}
 --- !u!50 &1964631373
 Rigidbody2D:
   serializedVersion: 4

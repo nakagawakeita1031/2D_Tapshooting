@@ -21,6 +21,9 @@ public class DefenceBase : MonoBehaviour
 
     private GameManager gameManager;
 
+    [SerializeField]
+    private GameObject enemyAttackEffectPrefab;
+
     /// <summary>
     /// DefenseBaseの設定
     /// </summary>
@@ -42,10 +45,16 @@ public class DefenceBase : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
+
             if (collision.TryGetComponent(out EnemyContoroller enemyContoroller))
             {
                 UpdateDurability(enemyContoroller);
+
             }
+
+            //エネミーの攻撃演出用のエフェクト生成
+            GenerateEnemyAttackEffect(collision.transform);
+
             Destroy(collision.gameObject);
         }
     }
@@ -90,4 +99,12 @@ public class DefenceBase : MonoBehaviour
         slider.DOValue((float)durability / maxDurability, 0.25f);
     }
 
+    private void GenerateEnemyAttackEffect(Transform enemyTran)
+    {
+        GameObject enemyAttackEffect = Instantiate(enemyAttackEffectPrefab, enemyTran, false);
+
+        enemyAttackEffect.transform.SetParent(transform);
+
+        Destroy(enemyAttackEffect, 3.0f);
+    }
 }
