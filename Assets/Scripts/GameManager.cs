@@ -14,7 +14,10 @@ public class GameManager : MonoBehaviour
     private PlayerController playerController;
    
     [SerializeField]
-    private EnemyGenerator enemyGenerator; 
+    private EnemyGenerator enemyGenerator;
+
+    [SerializeField]
+    private Transform temporaryObjectContainerTran;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +33,11 @@ public class GameManager : MonoBehaviour
 
         enemyGenerator.SetUpEnemyGenerator(this);
 
+        //TransformHelperスクリプトのtemporaryObjectContainerTran変数に情報を渡す
+        //TransformHelper.SetTemporaryObjectContainerTran(temporaryObjectContainerTran);
 
+        //TransformHelperスクリプトのtemporaryObjectContainerTranプロパティにtemporaryObjectContainerTran変数の情報を代入する
+        TransformHelper.TemporaryObjectContainerTran = temporaryObjectContainerTran;
     }
 
     // Update is called once per frame

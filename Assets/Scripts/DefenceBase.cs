@@ -53,7 +53,7 @@ public class DefenceBase : MonoBehaviour
             }
 
             //エネミーの攻撃演出用のエフェクト生成
-            GenerateEnemyAttackEffect(collision.transform);
+            GenerateEnemyAttackEffect(collision.gameObject.transform);
 
             Destroy(collision.gameObject);
         }
@@ -99,11 +99,18 @@ public class DefenceBase : MonoBehaviour
         slider.DOValue((float)durability / maxDurability, 0.25f);
     }
 
+    /// <summary>
+    /// エネミーが拠点に侵入した際の攻撃演出用のエフェクト生成
+    /// </summary>
+    /// <param name="enemyTran"></param>
     private void GenerateEnemyAttackEffect(Transform enemyTran)
     {
         GameObject enemyAttackEffect = Instantiate(enemyAttackEffectPrefab, enemyTran, false);
 
-        enemyAttackEffect.transform.SetParent(transform);
+        //enemyAttackEffect.transform.SetParent(TransformHelper.GetTemporaryObjectContainerTran());
+
+        //生成されたエフェクトをTemporaryObjectContainerTranの子オブジェトにする(引数にTemporaryObjectContainerTranプロパティを利用)
+        enemyAttackEffect.transform.SetParent(TransformHelper.TemporaryObjectContainerTran);
 
         Destroy(enemyAttackEffect, 3.0f);
     }
