@@ -20,6 +20,15 @@ public class EnemyGenerator : MonoBehaviour
 
     private GameManager gameManager;
 
+    [Header("エネミーの最大生成数")]
+    public int maxGenerateCount;
+
+    [Header("エネミーの生成完了管理用")]
+    public bool isGenerateEnd;
+
+    [Header("ボス討伐管理用")]
+    public bool isBossDestroyed;
+
     public void SetUpEnemyGenerator(GameManager gameManager)
     {
         this.gameManager = gameManager;
@@ -38,7 +47,22 @@ public class EnemyGenerator : MonoBehaviour
             timer = 0;
 
             //enemy生成
-            GenerateEnemy(); 
+            GenerateEnemy();
+
+            //生成したエネミーの数をカウントアップ
+            generateCount++;
+
+            Debug.Log("生成したエネミーの数：" + generateCount);
+
+            if (generateCount >= maxGenerateCount)
+            {
+                isGenerateEnd = true;
+
+                Debug.Log("生成完了");
+
+                //ボスの生成
+                StartCoroutine(GenerateBoss());
+            }
         }
     }
     /// <summary>
@@ -54,11 +78,36 @@ public class EnemyGenerator : MonoBehaviour
 
     private void Update()
     {
+        if (isGenerateEnd)
+        {
+            return;
+        }
+
         if (!gameManager.isGameUp)
         {
             //エネミー生成の準備
             PreparateGenerateEnemy();
         }
+
+    }
+
+    private IEnumerator GenerateBoss()
+    {
+        //TODO ボス出現の警告演出
+
+        yield return new WaitForSeconds(1.0f);
+
+        //TODO ボス討伐(仮)
+        SwitchBossDestroyed(true);
+    }
+
+    public void SwitchBossDestroyed(bool isSwitch)
+    {
+        isBossDestroyed = isSwitch;
+
+        Debug.Log("ボス討伐");
+
+        //TODO ゲームクリアの準備
 
     }
 }
