@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Transform temporaryObjectContainerTran;
 
+    public UIManager uIManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +40,9 @@ public class GameManager : MonoBehaviour
 
         //TransformHelperスクリプトのtemporaryObjectContainerTranプロパティにtemporaryObjectContainerTran変数の情報を代入する
         TransformHelper.TemporaryObjectContainerTran = temporaryObjectContainerTran;
+
+        //GameClearSetゲームオブジェクトを見えない状態にする
+        uIManager.HideGameClearSet();
     }
 
     // Update is called once per frame
@@ -52,5 +57,13 @@ public class GameManager : MonoBehaviour
     public void SwitchGameUp(bool isSwitch)
     {
         isGameUp = isSwitch;
+    }
+
+    /// <summary>
+    /// ゲームクリアの準備
+    /// </summary>
+    public void PreparateGameClear()
+    {
+        uIManager.DisplayGameClearSet();
     }
 }
