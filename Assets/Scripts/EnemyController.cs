@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class EnemyContoroller : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     public float moveSpeed;
     public int enemyHP;
@@ -17,15 +17,44 @@ public class EnemyContoroller : MonoBehaviour
     private int minHP = 0;
     private int maxHP;
 
+    //ボスの判定用。trueならBoss、falseならBoss以外
+    private bool isBoss;
+
+    private EnemyGenerator enemyGenerator;
+
     [SerializeField]
     private GameObject bulletEffectPrefab;
 
+    /// <summary>
+    /// Enemyの設定
+    /// </summary>
+    /// <param name="isBoss"></param>
     // Start is called before the first frame update
-    public void SetUpEnemy()
+    public void SetUpEnemy(bool isBoss = false)
     {
-        //エネミーのx軸(左右)の位置をゲーム画面に収まる範囲でランダムな位置に変更
-        transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-630, 630), transform.localPosition.y, 0);
-        
+        //引数で受け取った情報を変数に代入してスクリプト内で利用できる状態にする
+        this.isBoss = isBoss;
+
+        if (!this.isBoss)
+        {
+            //エネミーのx軸(左右)の位置をゲーム画面に収まる範囲でランダムな位置に変更
+            transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-630, 630), transform.localPosition.y, 0);
+        }
+        else
+        {
+            //Bossの位置を徐々に下方向に変更
+            transform.DOLocalMoveY(transform.localPosition.y - 500, 3.0f);
+
+            //BOssのサイズを大きくする
+            transform.localScale = Vector3.one * 4.0f;
+
+            //Hpゲージの位置を高い位置にする
+            slider.transform.localPosition = new Vector3(0, 60, 0);
+
+            //hpを３倍にする
+            enemyHP *= 3;
+        }
+
         //ゲーム開始時点のHPの値を最大値として代入
         maxHP = enemyHP;
 
@@ -36,8 +65,11 @@ public class EnemyContoroller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //このスクリプトがアタッチされているゲームオブジェクトを徐々に移動させる
-        transform.Translate(0, moveSpeed, 0);
+        if (!isBoss)
+        {
+            //このスクリプトがアタッチされているゲームオブジェクトを徐々に移動させる
+            transform.Translate(0, moveSpeed, 0);
+        }
 
         //Enemyの位置が一定値を超えたら
         if (transform.localPosition.y < -2500f)
@@ -82,6 +114,7 @@ public class EnemyContoroller : MonoBehaviour
         Destroy(collision.gameObject);
 
     }
+
     /// <summary>
     /// Hpの更新処理とエネミーの破壊確認処理
     /// </summary>
@@ -101,6 +134,13 @@ public class EnemyContoroller : MonoBehaviour
         if (enemyHP <= 0)
         {
             enemyHP = 0;
+
+            //BOssの場合
+            if (isBoss)
+            {
+                //Boss討伐済みの状態にする
+                enemyGenerator.SwitchBossDestroyed(true);
+            }
 
             //Enemy破壊
             Destroy(this.gameObject);
@@ -128,5 +168,17 @@ public class EnemyContoroller : MonoBehaviour
 
         Destroy(effect, 3.0f);
 
+    }
+
+    /// <summary>
+    /// Enemyの追加設定
+    /// </summary>
+    /// <param name="enemyGenerator"></param>
+    public void AdditionalSetUpEnemy(EnemyGenerator enemyGenerator)
+    {
+        //引数で受け取った情報を変数に代入してスクリプト内で利用できるようにする
+        this.enemyGenerator = enemyGenerator;
+
+        Debug.Log("追加設定完了");
     }
 }

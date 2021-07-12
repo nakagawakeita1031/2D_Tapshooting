@@ -68,15 +68,27 @@ public class EnemyGenerator : MonoBehaviour
     /// <summary>
     /// エネミーの生成
     /// </summary>
-    private void GenerateEnemy()
+    private void GenerateEnemy(bool isBoss = false)
     {
         //クローン生成
         //エネミーオブジェクトにアタッチされているEnemyControllerスクリプトの情報を取得し変数に代入
         //EnemyControllerスクリプトのSetUpEnemyメソッドを実行
-        Instantiate(enemyPrefab, transform, false).GetComponent<EnemyContoroller>().SetUpEnemy();
+        GameObject enemySetObj = Instantiate(enemyPrefab, transform, false);
+
+        EnemyController enemyController = enemySetObj.GetComponent<EnemyController>();
+
+        enemyController.SetUpEnemy(isBoss);
+
+        //Bossの場合
+        if (isBoss)
+        {
+            //追加設定を行う
+           enemyController.AdditionalSetUpEnemy(this);
+        }
+
     }
 
-    private void Update()
+    void Update()
     {
         if (isGenerateEnd)
         {
@@ -91,21 +103,32 @@ public class EnemyGenerator : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Bossの生成
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator GenerateBoss()
     {
         //TODO ボス出現の警告演出
 
         yield return new WaitForSeconds(1.0f);
 
-        //TODO ボス討伐(仮)
-        SwitchBossDestroyed(true);
+        //Boss生成
+        GenerateEnemy(true);
     }
 
+    /// <summary>
+    /// Boss討伐状態の切り替え
+    /// </summary>
+    /// <param name="isSwitch"></param>
     public void SwitchBossDestroyed(bool isSwitch)
     {
         isBossDestroyed = isSwitch;
 
         Debug.Log("ボス討伐");
+
+        //Boss討伐に合わせて、ゲーム終了の状態に切り替える
+        gameManager.SwitchGameUp(isBossDestroyed);
 
         //TODO ゲームクリアの準備
 

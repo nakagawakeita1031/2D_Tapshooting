@@ -46,7 +46,7 @@ public class DefenceBase : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
 
-            if (collision.TryGetComponent(out EnemyContoroller enemyContoroller))
+            if (collision.TryGetComponent(out EnemyController enemyContoroller))
             {
                 UpdateDurability(enemyContoroller);
 
@@ -63,7 +63,7 @@ public class DefenceBase : MonoBehaviour
     /// 耐久力の更新
     /// </summary>
     /// <param name="enemyContoroller"></param>
-    private void UpdateDurability(EnemyContoroller enemyContoroller)
+    private void UpdateDurability(EnemyController enemyContoroller)
     {
         durability -= enemyContoroller.enemyPower;
 
