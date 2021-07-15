@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
 
         //GameClearSetゲームオブジェクトを見えない状態にする
         uIManager.HideGameClearSet();
+
+        uIManager.HideGameOverSet();
     }
 
     // Update is called once per frame
@@ -65,5 +67,13 @@ public class GameManager : MonoBehaviour
     public void PreparateGameClear()
     {
         uIManager.DisplayGameClearSet();
+    }
+
+    /// <summary>
+    /// ゲームオーバーの準備
+    /// </summary>
+    public void PreparateGameOver()
+    {
+        uIManager.DisplayGameOverSet();
     }
 }

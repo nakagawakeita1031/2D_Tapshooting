@@ -75,13 +75,15 @@ public class DefenceBase : MonoBehaviour
         DisplayDurability();
 
 
-        //TODO 耐久値が0以下になっていないか確認
+        //耐久値が0以下になっていないか確認
         if (durability <= 0 && gameManager.isGameUp == false)
         {
             Debug.Log("Game Over");
 
-            //TODO 耐久値が0以下なら、ゲームオーバーの判定を行う
+            //耐久値が0以下なら、ゲームオーバーの判定を行う
             gameManager.SwitchGameUp(true);
+
+            gameManager.PreparateGameOver();
         }
 
 
