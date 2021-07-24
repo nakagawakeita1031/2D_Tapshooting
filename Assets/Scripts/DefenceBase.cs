@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -9,12 +8,6 @@ public class DefenceBase : MonoBehaviour
 {
     [Header("拠点の耐久値")]
     public int durability;
-
-    [SerializeField]
-    private Text txtDurability;
-
-    [SerializeField]
-    private Slider slider;
 
     private int minDurability = 0; //耐久値の最小を代入
     private int maxDurability; //耐久値の最大を代入
@@ -36,7 +29,7 @@ public class DefenceBase : MonoBehaviour
         //ゲームの開始時点の耐久値を最大値として代入する
         maxDurability = durability;
 
-        DisplayDurability();
+        gameManager.uIManager.DisplayDurability(durability, maxDurability);
 
         //TODO ゲージの表示を耐久値に合わせて更新する
     }
@@ -72,7 +65,7 @@ public class DefenceBase : MonoBehaviour
 
         Debug.Log("残りの耐久値" + durability);
 
-        DisplayDurability();
+        gameManager.uIManager.DisplayDurability(durability, maxDurability);
 
 
         //耐久値が0以下になっていないか確認
@@ -87,18 +80,6 @@ public class DefenceBase : MonoBehaviour
         }
 
 
-    }
-
-    /// <summary>
-    /// 耐久値の表示更新
-    /// </summary>
-    private void DisplayDurability()
-    {
-        //画面に耐久値を現在 / 最大値の形式で表示する
-        txtDurability.text = durability + "/" + maxDurability;
-
-        //ゲージの表示を耐久値に合わせて更新(最初はduability / maxduarbilityの結果が1.0ｆになるので、ゲージは最大値になる)
-        slider.DOValue((float)durability / maxDurability, 0.25f);
     }
 
     /// <summary>
