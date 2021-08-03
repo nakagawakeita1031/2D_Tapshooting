@@ -4,10 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+[RequireComponent(typeof(CapsuleCollider2D))]
 public class EnemyController : MonoBehaviour
 {
+    [Header("エネミーのデータ情報")]
+    public EnemyDataSO.EnemyData enemyData; //SetUpEnemyメソッドにて引数として受け取ったエネミーのデータを代入する。これにより振る舞いが変わる
+
+    [SerializeField]
+    private Image imgEnemy;
+
     public float moveSpeed;
-    public int enemyHP;
+   
+    //TODO後で削除する
     [Header("Enemyの攻撃力")]
     public int enemyPower;
 
@@ -17,8 +25,7 @@ public class EnemyController : MonoBehaviour
     private int minHP = 0;
     private int maxHP;
 
-    //ボスの判定用。trueならBoss、falseならBoss以外
-    private bool isBoss;
+    private int enemyHp;
 
     private EnemyGenerator enemyGenerator;
 
@@ -30,12 +37,12 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="isBoss"></param>
     // Start is called before the first frame update
-    public void SetUpEnemy(bool isBoss = false)
+    public void SetUpEnemy(EnemyDataSO.EnemyData enemyData)
     {
         //引数で受け取った情報を変数に代入してスクリプト内で利用できる状態にする
-        this.isBoss = isBoss;
+        this.enemyData = enemyData;
 
-        if (!this.isBoss)
+        if (this.enemyData.enemyType != EnemyType.Boss)
         {
             //エネミーのx軸(左右)の位置をゲーム画面に収まる範囲でランダムな位置に変更
             transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-630, 630), transform.localPosition.y, 0);
@@ -43,20 +50,22 @@ public class EnemyController : MonoBehaviour
         else
         {
             //Bossの位置を徐々に下方向に変更
-            transform.DOLocalMoveY(transform.localPosition.y - 500, 3.0f);
+            transform.DOLocalMoveY(transform.localPosition.y - 600, 3.0f);
 
             //BOssのサイズを大きくする
-            transform.localScale = Vector3.one * 4.0f;
+            transform.localScale = Vector3.one * 7.0f;
 
             //Hpゲージの位置を高い位置にする
             slider.transform.localPosition = new Vector3(0, 60, 0);
-
-            //hpを３倍にする
-            enemyHP *= 3;
         }
 
+        //画像をEnemyDataの画像にする(ここでエネミーごとの画像に変更する)
+        imgEnemy.sprite = this.enemyData.enemySprite;
+
         //ゲーム開始時点のHPの値を最大値として代入
-        maxHP = enemyHP;
+        maxHP = this.enemyData.hp;
+
+        enemyHp = maxHP;
 
         //HPゲージの表示更新
         DisplayHpGauge();
@@ -65,7 +74,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isBoss)
+        if (enemyData.enemyType != EnemyType.Boss)
         {
             //このスクリプトがアタッチされているゲームオブジェクトを徐々に移動させる
             transform.Translate(0, moveSpeed, 0);
@@ -106,13 +115,8 @@ public class EnemyController : MonoBehaviour
     /// <param name="collision"></param>
     private void DestroyBullet(Collider2D collision)
     {
-        //侵入判定確認
-        Debug.Log("侵入したオブジェクト名：" + collision.gameObject.tag);
-
-
         //Bulletゲームオブジェクトを破壊
         Destroy(collision.gameObject);
-
     }
 
     /// <summary>
@@ -122,21 +126,21 @@ public class EnemyController : MonoBehaviour
     private void UpdateHP(Bullet bullet) //受け取る情報用の引数を追加
     {
         //Enemyの体力を減らす
-        enemyHP -= bullet.bulletPower; //Bulletスクリプトが管理しているpublic情報であるbulletPower変数を利用する
+        enemyHp -= bullet.bulletPower; //Bulletスクリプトが管理しているpublic情報であるbulletPower変数を利用する
 
         //Hpの値の上限・下限を確認して範囲内に制限
-        enemyHP = Mathf.Clamp(enemyHP, minHP, maxHP);
+        enemyHp = Mathf.Clamp(enemyHp, minHP, maxHP);
 
         //Hpゲージの表示更新
         DisplayHpGauge();
 
         //体力が０以下になったら
-        if (enemyHP <= 0)
+        if (enemyHp <= 0)
         {
-            enemyHP = 0;
+            enemyHp = 0;
 
             //BOssの場合
-            if (isBoss)
+            if (enemyData.enemyType == EnemyType.Boss)
             {
                 //Boss討伐済みの状態にする
                 enemyGenerator.SwitchBossDestroyed(true);
@@ -147,7 +151,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            Debug.Log("残り HP :" + enemyHP);
+            Debug.Log("残り HP :" + enemyHp);
         }
     }
 
@@ -157,7 +161,7 @@ public class EnemyController : MonoBehaviour
     private void DisplayHpGauge()
     {
         //Hpゲージを現在値に合わせて制御
-        slider.DOValue((float)enemyHP / maxHP, 0.25f);
+        slider.DOValue((float)enemyHp / maxHP, 0.25f);
     }
 
     private void GenerateBulletEffect(Transform bulletTran)
