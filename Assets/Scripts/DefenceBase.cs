@@ -58,7 +58,10 @@ public class DefenceBase : MonoBehaviour
     /// <param name="enemyContoroller"></param>
     private void UpdateDurability(EnemyController enemyContoroller)
     {
-        durability -= enemyContoroller.enemyPower;
+        durability -= enemyContoroller.enemyData.power;
+
+        //エネミーの攻撃力を反映しているか確認
+        Debug.Log("エネミーの攻撃力:" + enemyContoroller.enemyData.power);
 
         //耐久値を上限・下限値の範囲内に収まるかを確認し、それを超えた場合には上限・制限する
         durability = Mathf.Clamp(durability, minDurability, maxDurability);

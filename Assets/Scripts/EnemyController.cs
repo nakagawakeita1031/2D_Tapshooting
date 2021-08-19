@@ -14,10 +14,6 @@ public class EnemyController : MonoBehaviour
     private Image imgEnemy;
 
     public float moveSpeed;
-   
-    //TODO後で削除する
-    [Header("Enemyの攻撃力")]
-    public int enemyPower;
 
     [SerializeField]
     private Slider slider;
