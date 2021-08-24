@@ -16,5 +16,6 @@ public class EnemyDataSO : ScriptableObject
         public int power;　　　　　　 //エネミーの攻撃力
         public Sprite enemySprite;　　//エネミーの画像
         public EnemyType enemyType;　 //エネミーのタイプ
+        public int exp;
     }
 }
