@@ -21,6 +21,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Slider slider;
+
+    [SerializeField]
+    private Text txtTotalExp;
     
     /// <summary>
     /// ゲームクリア表示を隠す
@@ -67,5 +70,14 @@ public class UIManager : MonoBehaviour
 
         //ゲージの表示を耐久値に合わせて更新(最初はduability / maxduarbilityの結果が1.0ｆになるので、ゲージは最大値になる)
         slider.DOValue((float)durability / maxDurability, 0.25f);
+    }
+
+    /// <summary>
+    /// TotalExpの表示更新
+    /// </summary>
+    /// <param name="totalExp"></param>
+    public void UpdateDisplayTotalExp(int totalExp)
+    {
+        txtTotalExp.text = totalExp.ToString();
     }
 }

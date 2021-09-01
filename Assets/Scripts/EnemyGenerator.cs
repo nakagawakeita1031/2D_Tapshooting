@@ -183,4 +183,16 @@ public class EnemyGenerator : MonoBehaviour
         //抽出処理の結果を戻す
         return enemyDatas;
     }
+
+    /// <summary>
+    /// TotalExpの表示更新準備
+    /// </summary>
+    /// <param name="exp"></param>
+    public void PreparateDisplayTotalExp(int exp)
+    {
+        //GameManagerスクリプトからUIManagerスクリプトのUpdateDisplayTotalExpメソッドを実行する
+        gameManager.uIManager.UpdateDisplayTotalExp(GameData.instance.GetTotalExp());
+
+        //TODO 引数のexp変数は後々利用する
+    }
 }
