@@ -28,7 +28,7 @@ MonoBehaviour:
     enemyType: 0
     exp: 20
     moveDuration: 15
-    moveType: 0
+    moveType: 1
   - no: 2
     hp: 500
     power: 50

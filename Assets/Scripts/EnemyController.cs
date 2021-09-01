@@ -65,24 +65,9 @@ public class EnemyController : MonoBehaviour
 
         //HPゲージの表示更新
         DisplayHpGauge();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (enemyData.enemyType != EnemyType.Boss)
-        {
-            //このスクリプトがアタッチされているゲームオブジェクトを徐々に移動させる
-            transform.Translate(0, moveSpeed, 0);
-        }
-
-        //Enemyの位置が一定値を超えたら
-        if (transform.localPosition.y < -2500f)
-        {
-            
-            Destroy(gameObject);
-        }
-       
+        //移動タイプに応じた移動方法を選択して実行
+        SetMoveByMoveType();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -187,4 +172,44 @@ public class EnemyController : MonoBehaviour
 
         Debug.Log("追加設定完了");
     }
+
+    /// <summary>
+    /// 移動タイプに応じた移動方法を選択して実行
+    /// </summary>
+    private void SetMoveByMoveType()
+    {
+        //moveTypeで分岐
+        switch (enemyData.moveType)
+        {
+            //Straightの場合
+            case MoveType.Straight:
+                MoveStraight();
+                break;
+
+            case MoveType.Meandering:
+                MoveMeandering();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 直進移動
+    /// </summary>
+    private void MoveStraight()
+    {
+        Debug.Log("直進");
+
+        transform.DOLocalMoveY(-3000, enemyData.moveDuration);
+    }
+
+    private void MoveMeandering()
+    {
+        Debug.Log("蛇行");
+
+        //左右方向の移動をループ処理することで行ったり来たりさせる。左右の移動幅はランダム、移動間隔は等速
+        transform.DOLocalMoveX(transform.position.x + Random.Range(200.0f, 400.0f), 1f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.Linear);
+
+        transform.DOLocalMoveY(-3000, enemyData.moveDuration);
+    }
+
 }
