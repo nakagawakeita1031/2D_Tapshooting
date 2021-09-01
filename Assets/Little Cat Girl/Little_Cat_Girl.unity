@@ -1982,6 +1982,7 @@ MonoBehaviour:
   txtGameOver: {fileID: 1188204925}
   txtDurability: {fileID: 215857918}
   slider: {fileID: 914723554}
+  txtTotalExp: {fileID: 2011852650}
 --- !u!4 &1369266850
 Transform:
   m_ObjectHideFlags: 0
@@ -2268,6 +2269,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalExp: 0
+  durabilityBase: 300
+  maxGenerateCountBase: 5
 --- !u!4 &1570864741
 Transform:
   m_ObjectHideFlags: 0
