@@ -45,9 +45,6 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            //Bossの位置を徐々に下方向に変更
-            transform.DOLocalMoveY(transform.localPosition.y - 600, 3.0f);
-
             //BOssのサイズを大きくする
             transform.localScale = Vector3.one * 7.0f;
 
@@ -189,6 +186,10 @@ public class EnemyController : MonoBehaviour
             case MoveType.Meandering:
                 MoveMeandering();
                 break;
+
+            case MoveType.Boss_Horizontal:
+                MoveHorizontal();
+                break;
         }
     }
 
@@ -202,14 +203,34 @@ public class EnemyController : MonoBehaviour
         transform.DOLocalMoveY(-3000, enemyData.moveDuration);
     }
 
+    /// <summary>
+    /// 蛇行移動
+    /// </summary>
     private void MoveMeandering()
     {
         Debug.Log("蛇行");
 
         //左右方向の移動をループ処理することで行ったり来たりさせる。左右の移動幅はランダム、移動間隔は等速
+        //-1は無限ループ
         transform.DOLocalMoveX(transform.position.x + Random.Range(200.0f, 400.0f), 1f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.Linear);
 
         transform.DOLocalMoveY(-3000, enemyData.moveDuration);
+    }
+
+    /// <summary>
+    /// ボス・水平移動
+    /// </summary>
+    private void MoveHorizontal()
+    {
+        transform.localPosition = new Vector3(0, transform.localPosition.y, transform.localPosition.z);
+        transform.DOLocalMoveY(-650, 3.0f).OnComplete(() => 
+        { 
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(transform.DOLocalMoveX(transform.localPosition.x + 550, 2.5f).SetEase(Ease.Linear)); //[2]
+            sequence.Append(transform.DOLocalMoveX(transform.localPosition.x + -550, 5.0f)).SetEase(Ease.Linear);//[3]
+            sequence.Append(transform.DOLocalMoveX(transform.localPosition.x, 2.5f).SetEase(Ease.Linear));       //[4]
+            sequence.AppendInterval(1.0f).SetLoops(-1, LoopType.Restart);                                        //[5]
+        });
     }
 
 }
